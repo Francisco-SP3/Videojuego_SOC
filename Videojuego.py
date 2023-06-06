@@ -225,4 +225,4 @@ def iniciarJuego():
 iniciarJuego()
 
 cap.release()
-cap2.release(
+cap2.release()
