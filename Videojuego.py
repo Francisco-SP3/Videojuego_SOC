@@ -161,7 +161,7 @@ button2_pushed = 0
 
 
 def menuPrincipal():
-    print("Chido")
+    print("Cool")
 
 def cont(num, flagD):
     
