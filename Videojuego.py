@@ -159,46 +159,57 @@ P2 = jug.Jugadores(2)
 def get_font(size): # Returns Press-Start-2P in the desired size
     return pygame.font.Font("font.ttf", size)
 
-def cont(num, flagD):
-    
-    if num > 0:
-        time.sleep(1)
-        num -= 1
-    
-    #Jugador 1
-    if flagD == 1:
-        num -= 10
-    
-    return num 
-
 def iniciarJuego():
     # Actualizar fondo y caption del display
     pygame.display.set_caption("Juego")
-    Main = pygame.image.load("Background_juego.png")
+    Main = pygame.image.load("backgroundJuego.png")
     SCREEN.blit(Main, (0, 0))
 
     # Fondo de contadores
-    Button = pygame.image.load("Button.png")
-    posButton = Button.get_rect(center=(250, 75))
-    posButton2 = Button.get_rect(center=(750, 75))
+    Button = pygame.image.load("button.png")
+    butCnt = Button.get_rect(center=(130, 75))
+    butCnt2 = Button.get_rect(center=(660, 75))
+    butPnt = Button.get_rect(center=(340, 75))
+    butPnt2 = Button.get_rect(center=(870, 75))
 
-    # cont1p = cont1
-    # cont2p = cont2
+    # Fondo de colores
+    Gray = pygame.image.load("colGray.png")
+    colorL = Gray.get_rect(center=(235, 225))
+    colorR = Gray.get_rect(center=(765, 225))
+    SCREEN.blit(Gray, colorL)
+    SCREEN.blit(Gray, colorR)
+    
+    # Fondo de foto
+    Cam = pygame.image.load("cam.png")
+    camL = Cam.get_rect(center=(235, 450))
+    camR = Cam.get_rect(center=(765, 450))
+    SCREEN.blit(Cam, camL)
+    SCREEN.blit(Cam, camR)
 
     P1.setInT()
     P2.setInT()
     
     while True:
 
-        contText = get_font(45).render(str(P1.cnt), True, "White")
-        contText2 = get_font(45).render(str(P2.cnt), True, "White")
-        posText = contText.get_rect(center=(250, 75))
-        posText2 = contText.get_rect(center=(750, 75))
+        textCnt = get_font(45).render(str(P1.cnt), True, "White")
+        textCnt2 = get_font(45).render(str(P2.cnt), True, "White")
+        posCnt = textCnt.get_rect(center=(130, 75))
+        posCnt2 = textCnt2.get_rect(center=(660, 75))
+
+        textPnt = get_font(45).render(str(P1.pts), True, "White")
+        textPnt2 = get_font(45).render(str(P2.pts), True, "White")
+        posPnt = textPnt.get_rect(center=(340, 75))
+        posPnt2 = textPnt2.get_rect(center=(870, 75))
+
+        SCREEN.blit(Button, butCnt)
+        SCREEN.blit(textCnt, posCnt)
+        SCREEN.blit(Button, butCnt2)
+        SCREEN.blit(textCnt2, posCnt2)
         
-        SCREEN.blit(Button, posButton)
-        SCREEN.blit(contText, posText)
-        SCREEN.blit(Button, posButton2)
-        SCREEN.blit(contText2, posText2)
+        SCREEN.blit(Button, butPnt)
+        SCREEN.blit(textPnt, posPnt)
+        SCREEN.blit(Button, butPnt2)
+        SCREEN.blit(textPnt2, posPnt2)
         pygame.display.update()
 
         # cont1p = cont(cont1p, FlagD1)
@@ -209,15 +220,17 @@ def iniciarJuego():
         P1.checkTim()
         P2.checkTim()
 
-        if P1.cnt == 55:
-            P1.err = 1
+        # if P1.cnt == 55:
+        #     P1.err = 1
         
         if P1.rst == 1:
-            print("Acabó")
             P1.rst = 0
+        
+        if P1.cnt % 5 == 0:
+            P1.pts += 5
 
-        print(str(P1.cnt))
-        print(str(P2.cnt))
+        # print(str(P1.cnt))
+        # print(str(P2.cnt))
         
 
 iniciarJuego()
