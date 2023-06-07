@@ -1,17 +1,18 @@
 # Secuencia de colores
 
-import pygame, sys, time #cv2
+import pygame, time #, cv2
 import numpy as np
-#import RPi.GPIO as GPIO
+import jugadores as jug
+# import RPi.GPIO as GPIO
 
 pygame.init()
 
 SCREEN = pygame.display.set_mode((1000,600))
 pygame.display.set_caption("Menu")
 
-#Variables de captura de camaras
-#cap = cv2.VideoCapture(0)
-#cap2 = cv2.VideoCapture(2)
+# Variables de captura de camaras
+# cap = cv2.VideoCapture(0)
+# cap2 = cv2.VideoCapture(2)
 
 # Azul (Azul)
 azulBajo1 = np.array([70,90,110],np.uint8)
@@ -37,13 +38,9 @@ FlagD2 = 0
 cont1 = 100
 cont2 = 100
 
-# Setup de botones
-button_pushed = 0
-button2_pushed = 0
-# GPIO.setwarnings(False)
-# GPIO.setmode(GPIO.BOARD)
-# GPIO.setup(10,GPIO.IN,pull_up_down=GPIO.PUD_DOWN)
-# GPIO.setup(8,GPIO.IN,pull_up_down=GPIO.PUD_DOWN)
+#Clase de jugadores
+P1 = jug.Jugadores(1)
+P2 = jug.Jugadores(2)
 
 # def dibujar(mask,color,frame):
 #   contornos,hierachy = cv2.findContours(mask, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
@@ -159,9 +156,8 @@ button2_pushed = 0
 #     SCREEN.blit(BG, (lado, 300))
 #     pygame.display.update()
 
-
-def menuPrincipal():
-    print("Cool")
+def get_font(size): # Returns Press-Start-2P in the desired size
+    return pygame.font.Font("font.ttf", size)
 
 def cont(num, flagD):
     
@@ -176,51 +172,53 @@ def cont(num, flagD):
     return num 
 
 def iniciarJuego():
+    # Actualizar fondo y caption del display
     pygame.display.set_caption("Juego")
     Main = pygame.image.load("Background_juego.png")
     SCREEN.blit(Main, (0, 0))
-    pygame.display.update()
+
+    # Fondo de contadores
+    Button = pygame.image.load("Button.png")
+    posButton = Button.get_rect(center=(250, 75))
+    posButton2 = Button.get_rect(center=(750, 75))
+
+    # cont1p = cont1
+    # cont2p = cont2
+
+    P1.setInT()
+    P2.setInT()
     
     while True:
-        # Checar boton de jugador 1
-        # if GPIO.input(8) == GPIO.HIGH and button_pushed == 0:
-        #     # Toma foto
-        #     tom1 = tomarFoto(0)
-        #     # Actualiza foto
-        #     if tom1 == 1:
-        #         actualizarFoto(0)
-        #     else:
-        #         print("No se actualizó")
-        #     # Toma foto
-        #     tom2 = tomarFoto(2)
-        #     # Actualiza foto
-        #     if tom2 == 1:
-        #         actualizarFoto(2)
-        #     else:
-        #         print("No se actualizó")
-        #     # Boton presionado
-        #     button_pushed = 1
-        # if GPIO.input(8) == GPIO.LOW:
-        #     # Boton ya no presionado
-        #     button_pushed = 0
-        
-        # # Checar boton de jugador 2
-        # if GPIO.input(10) == GPIO.HIGH and button2_pushed == 0:
-        #      # Toma foto
-        #     tomarFoto(0)
-        #     # Actualiza foto
-        #     actualizarFoto(0)
-        #     # Boton presionado
-        #     button2_pushed = 1
-        # if GPIO.input(10) == GPIO.LOW:
-        #     # Boton ya no presionado
-        #     button2_pushed = 0
-        
-        cont1p = cont(cont1, FlagD1)
-        cont2p = cont(cont2, FlagD2)
-        print("Contador1: " + str(cont1p))
-        print("Contador2: " + str(cont2p))
 
+        contText = get_font(45).render(str(P1.cnt), True, "White")
+        contText2 = get_font(45).render(str(P2.cnt), True, "White")
+        posText = contText.get_rect(center=(250, 75))
+        posText2 = contText.get_rect(center=(750, 75))
+        
+        SCREEN.blit(Button, posButton)
+        SCREEN.blit(contText, posText)
+        SCREEN.blit(Button, posButton2)
+        SCREEN.blit(contText2, posText2)
+        pygame.display.update()
+
+        # cont1p = cont(cont1p, FlagD1)
+        # cont2p = cont(cont2p, FlagD2)
+        # print("Contador1: " + str(cont1p))
+        # print("Contador2: " + str(cont2p))
+
+        P1.checkTim()
+        P2.checkTim()
+
+        if P1.cnt == 55:
+            P1.err = 1
+        
+        if P1.rst == 1:
+            print("Acabó")
+            P1.rst = 0
+
+        print(str(P1.cnt))
+        print(str(P2.cnt))
+        
 
 iniciarJuego()
 
